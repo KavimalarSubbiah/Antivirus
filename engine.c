@@ -24,17 +24,22 @@ int scanCallback(
 
     // Cast user_data back to const char* to get the filePath
     const char* filePath = (const char*)user_data;
+    static int ruleMatched = 0;
 
     switch (message) {
     case CALLBACK_MSG_RULE_MATCHING:
-        printf("Matched rule: %s in file: %s\n", ((YR_RULE*)message_data)->identifier, filePath);
+        printf("Matched rule: %s \n", ((YR_RULE*)message_data)->identifier);
+        printf("%s probably contains malware based on Signature based detection", filePath)
+        ruleMatched = 1; 
         break;
     case CALLBACK_MSG_RULE_NOT_MATCHING:
-        printf("Did not match rule: %s in file: %s\n", ((YR_RULE*)message_data)->identifier, filePath);
+        printf("Did not match rule: %s \n", ((YR_RULE*)message_data)->identifier);
         break;
     case CALLBACK_MSG_SCAN_FINISHED:
-        printf("Scan finished for file: %s\n", filePath);
-        
+        printf("Scan finished for file %s \n", filePath);
+        fflush(stdout); 
+        // if flag ==1  flag it
+        if(ruleMatched==0){
         char cwd[BUFFER_SIZE];
     if (getcwd(cwd, sizeof(cwd)) == NULL) {
         perror("getcwd() failed");
@@ -51,12 +56,10 @@ int scanCallback(
         int result = system(command);
         if (result == -1) {
             perror("Error executing Python script");
-        }
-        break;
-
+        }}
         break;
     case CALLBACK_MSG_TOO_MANY_MATCHES:
-        printf("Too many matches in file: %s\n", filePath);
+        printf("Too many matches in file\n");
         break;
     case CALLBACK_MSG_CONSOLE_LOG:
         printf("Console log for file %s: %s\n", filePath, (char*)message_data);
@@ -73,7 +76,6 @@ int scanCallback(
 
 void scanFile(const char* filePath, YR_RULES* rules) {
     // Corrected the last argument to 0 (for no timeout)
-    printf("%s",filePath);
     yr_rules_scan_file(rules, filePath, SCAN_FLAGS_REPORT_RULES_MATCHING, scanCallback,(void*)filePath, 0);
 }
 
@@ -127,7 +129,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    const char directory_path[] = "/home/administrator/SEM-7 PROJECTS/Malware-Detection-ML-Model/AV/rules";  // Update this path
+    const char directory_path[] = "/home/elizabeth/Desktop/netsec/Antivirus/AV/rules";  // Update this path
     char* file_path = argv[1];
 
     // Initialize YARA
