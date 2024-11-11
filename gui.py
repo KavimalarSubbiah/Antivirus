@@ -3,7 +3,7 @@ from tkinter import filedialog
 import subprocess
 import ttkbootstrap as tb
 
-root = tb.Window(themename="superhero")
+root = tb.Window(themename="vapor")
 
 root.title("żbikAV")
 root.geometry("1440x900")
@@ -43,14 +43,14 @@ def toggle_upload_type():
         upload_type = "file"
         toggle_button.config(text="Switch to Directory Upload")
 
-my_label = tb.Label(text="Best AV in the world", font=("Helvetica", 40), bootstyle="default")
-my_label.pack(pady=10)
+my_label = tb.Label(text="KAMEL ANTIVIRUS", font=("Roboto", 32, "bold"), bootstyle="default")
+my_label.pack(pady=30)
 
 # Add a toggle button to switch between file and directory upload
 toggle_button = tb.Button(text="Switch to Directory Upload", bootstyle="secondary", command=toggle_upload_type)
 toggle_button.pack(pady=10)
 
-file_label = tb.Label(text="", font=("Helvetica", 12), bootstyle="default")
+file_label = tb.Label(text="", font=("Helvetica", 12, "bold"), bootstyle="default")
 file_label.pack(pady=10)
 
 # Load your initial image
@@ -68,11 +68,11 @@ my_button = tb.Button(text="Upload", bootstyle="primary, outline", command=lambd
 my_button.config(padding="40 15")
 my_button.pack(pady=20)
 
-my_label = tb.Label(text="Scan results", font=("Helvetica", 30), bootstyle="default")
+my_label = tb.Label(text="Scan results", font=("Helvetica", 26, "bold"), bootstyle="default")
 my_label.pack(pady=20)
 
 # Create a text widget to display the output
-output_text = Text(root, width=200, height=30, wrap='word', font=("Helvetica", 14))
+output_text = Text(root, width=200, height=35, wrap='word', font=("Helvetica", 12, "bold"))
 output_text.pack(pady=10)
 
 

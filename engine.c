@@ -29,26 +29,28 @@ int scanCallback(
     switch (message) {
     case CALLBACK_MSG_RULE_MATCHING:
         printf("Matched rule: %s \n", ((YR_RULE*)message_data)->identifier);
-        printf("%s probably contains malware based on Signature based detection", filePath)
         ruleMatched = 1; 
         break;
     case CALLBACK_MSG_RULE_NOT_MATCHING:
         printf("Did not match rule: %s \n", ((YR_RULE*)message_data)->identifier);
         break;
     case CALLBACK_MSG_SCAN_FINISHED:
-        printf("Scan finished for file %s \n", filePath);
+        printf("\n");
+        printf("Scan finished for file\n");
+        printf("\n");
         fflush(stdout); 
-        // if flag ==1  flag it
+        
         if(ruleMatched==0){
         char cwd[BUFFER_SIZE];
     if (getcwd(cwd, sizeof(cwd)) == NULL) {
         perror("getcwd() failed");
         return CALLBACK_CONTINUE;
     }
-
+        printf("Phase-1 Finished: File Seems legitimate\n");
+        printf("Proceeding to Phase-2: Heuristic Analysis\n");
+        fflush(stdout); 
         // Construct the command to call main.py with the file path as an argument
         char command[BUFFER_SIZE];
-
         const char* relativePath = filePath + strlen(cwd) + 1; // +1 to skip the '/'
         snprintf(command, sizeof(command), "python3 main.py %s", relativePath);
 
@@ -57,6 +59,10 @@ int scanCallback(
         if (result == -1) {
             perror("Error executing Python script");
         }}
+        
+        else{
+        printf("\n Phase-1 Finished: File is MALICIOUS. You are advised to DELETE THE FILE\n");
+        } 
         break;
     case CALLBACK_MSG_TOO_MANY_MATCHES:
         printf("Too many matches in file\n");
@@ -129,7 +135,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    const char directory_path[] = "/home/elizabeth/Desktop/netsec/Antivirus/AV/rules";  // Update this path
+    const char directory_path[] = "/home/administrator/SEM-7 PROJECTS/Antivirus/AV/rules";  // Update this path
     char* file_path = argv[1];
 
     // Initialize YARA
